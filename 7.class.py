@@ -31,11 +31,18 @@ class Dog(Animal):
 
 
 class SB(Dog, Animal):
+    del_obj = Animal("cat")
+
     def __init__(self, name):
         super().__init__(name)
 
-    def __delete__(self, instance):
-        print("delete")
+    # 删除对象
+    def __delete__(self, name):
+        print(f"正在删除属性对象: {name}")
+
+    # 删除属性
+    def __delattr__(self, name):
+        print(f"正在删除属性: {name}")
 
     def __add__(self, other):
         return self.name + other.name
@@ -45,7 +52,8 @@ class SB(Dog, Animal):
         return f"SB(name='{self.name}')"
 
     def __eq__(self, value):
-        if not isinstance(value, SB): return False
+        if not isinstance(value, SB):
+            return False
         return self.name == value.name
 
 
@@ -54,13 +62,15 @@ class SB(Dog, Animal):
 sb = SB("dog")
 sb1 = SB("dog1")
 
-print(sb + sb1)
+# print(sb + sb1)
 
-del sb1
+del sb1.name
 
-print("repr用于完整对象日志记录：" + repr(sb))
+del sb1.del_obj
 
-sb1 = eval(repr(sb))
-print("搭配eval可以重新创建对象：", sb1.name)
+# print("repr用于完整对象日志记录：" + repr(sb))
 
-print(sb1 == sb, sb1 is sb)
+# sb1 = eval(repr(sb))
+# print("搭配eval可以重新创建对象：", sb1.name)
+
+# print(sb1 == sb, sb1 is sb)
